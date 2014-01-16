@@ -15,6 +15,9 @@ Setup:
     Set `com.ibm.collaboration.realtime.webapi/startWebContainer=true`
 
 4. Lotus Notes must be running.
+5. Right now, the `userId` is hard code, so you need to change it manually in the main.go.
+
+    Change this. `userId = "?"`
 
 Run:
 
