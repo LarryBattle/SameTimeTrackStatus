@@ -20,7 +20,7 @@ Logs the status of users in IBM Lotus Notes SameTime 8+
 
     go run main.go -userid=USER_ID
 
-##Documentation:
+##Dev Documentation:
 
 - [IBM Sametime Software Developer Kit (SDK)](http://www14.software.ibm.com/webapp/download/nochargesearch.jsp?q0=&k=ALL&S_TACT=104CBW71&status=Active&b=Lotus&sr=1&q=sametime+sdk&ibm-search=Search)
 
