@@ -1,7 +1,7 @@
 SameTimeTrackStatus
 ===================
 
-Logs the status of users in IBM Lotus Notes 8+
+Logs the status of users in IBM Lotus Notes SameTime 8+
 
 
 Setup:
