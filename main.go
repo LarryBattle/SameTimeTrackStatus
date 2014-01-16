@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	VERSION             = "0.0.3"
+	VERSION             = "0.1.0"
 	TIME_STAMP_FORMAT   = "01/02/2006 03:04:05pm"
 	DEFAULT_OUTPUT_FILE = "output.txt"
 )
