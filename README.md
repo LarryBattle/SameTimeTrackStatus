@@ -38,5 +38,5 @@ Also there will be a file called `status.txt` that will store all the responses 
 
 ##Note:
 
-- This has only been test in Windows XP.
+- This has only been tested in Windows XP.
 - This is very beta at the moment so a lot will change.
