@@ -4,7 +4,7 @@ SameTimeTrackStatus
 Logs the status of users in IBM Lotus Notes SameTime 8+
 
 
-Setup:
+##Setup:
 
 1. [Google Go](http://golang.org/) must be installed.
 2. Lotus Notes must be installed.
@@ -15,11 +15,11 @@ Setup:
     Set `com.ibm.collaboration.realtime.webapi/startWebContainer=true`
 
 4. Lotus Notes must be running.
-5. Right now, the `userId` is hard code, so you need to change it manually in the main.go.
+5. Right now, the userId is hard code. So you need to change it manually.
 
-    Change this. `userId = "?"`
+    Change `userId = "?"`, in `main.go`
 
-Run:
+##Run:
 
     go run main.go
     
@@ -32,6 +32,6 @@ Output:
 	
 Also there will be a file called `status.txt` that will store all the responses from the webapi.
 
-WebAPI documentation:
+##Documentation:
 
 - [IBM Sametime Software Developer Kit (SDK)](http://www14.software.ibm.com/webapp/download/nochargesearch.jsp?q0=&k=ALL&S_TACT=104CBW71&status=Active&b=Lotus&sr=1&q=sametime+sdk&ibm-search=Search)
