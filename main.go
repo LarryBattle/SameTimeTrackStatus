@@ -1,4 +1,4 @@
-// Tracks 
+// Tracks users in Lotus Notes SameTime Instant Messager
 // Created by: Larry Battle
 // Version: 0.0.1
 // @todo Turn this into a CLI tool with options: -users=id1,id2,id3 -output=file -verbose=bool -api_url=string
