@@ -6,8 +6,8 @@
 // @requires Lotus Notes 8+, Google Go 1.2
 // @project https://github.com/LarryBattle/SameTimeTrackStatus/
 // @author Larry Battle
-// @version 0.1.0
-// @todo Add new flags : -users=id1,id2,id3 -verbose=bool -api_url=string
+// @version 0.1.1
+// @todo Add new flags : -users=id1,id2,id3 -verbose=bool -api_url=string -interval=#minutes
 // @todo add check for Lotus Notes and setting.
 // @todo refactor into objects; webapi, storage, cli, settings, user
 package main
@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	VERSION             = "0.1.0"
+	VERSION             = "0.1.1"
 	TIME_STAMP_FORMAT   = "01/02/2006 03:04:05pm"
 	DEFAULT_OUTPUT_FILE = "output.txt"
 )
@@ -34,6 +34,7 @@ var (
 	outputFile             string
 	userId                 string
 	showVersion            bool
+	numOfMinutes	uint
 )
 
 // Used to only contain the essenential properties from the json response
@@ -49,8 +50,9 @@ type essential_ST_JSON struct {
 // Processes the flag information.
 func processFlags() {
 	flag.StringVar(&userId, "userid", "", "REQUIRED. Sametime User Id. Try your id if you don't know.")
-	flag.StringVar(&outputFile, "output", DEFAULT_OUTPUT_FILE, "Output file to store logs. Defaults to output.txt")
+	flag.StringVar(&outputFile, "output", DEFAULT_OUTPUT_FILE, "Output file to store logs.")
 	flag.BoolVar(&showVersion, "version", false, "Shows version information.")
+	flag.UintVar(&numOfMinutes, "interval", 5, "Interval to check status.")
 	flag.Parse()
 }
 
@@ -61,6 +63,10 @@ func checkSettings() {
 		os.Exit(1)
 	}
 	if userId == "" {
+		fmt.Println("The argument `userid` is required.")
+		os.Exit(1)
+	}
+	if numOfMinutes < 1 || 200 < numOfMinutes {
 		fmt.Println("The argument `userid` is required.")
 		os.Exit(1)
 	}
@@ -135,8 +141,8 @@ func main() {
 	printGreeting()
 	processFlags()
 	checkSettings()
-	log.Printf("Saving status for %s to %s\n", userId, outputFile)
-	startCounter(2*time.Second, func() {
+	log.Printf("Every %d minutes: Saving status for %s to %s\n", numOfMinutes, userId, outputFile)
+	startCounter( time.Duration(numOfMinutes) *time.Minute, func() {
 		logSameTimeStatus(userId)
 	})
 }
