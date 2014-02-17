@@ -28,3 +28,4 @@ Logs the status of users in IBM Lotus Notes SameTime 8+
 
 - This has only been tested in Windows XP.
 - Users can disable `Auto-Status Changes` in Lotus Notes for SameTime. Thus preventing others from knowing when a user is away from their desk.
+- In order to save the name of the user id, the person must be in your same time contact list.
