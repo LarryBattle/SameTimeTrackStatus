@@ -6,7 +6,7 @@ Logs the status of users in IBM Lotus Notes SameTime 8+
 
 ##Setup:
 
-1. [Google Go](http://golang.org/) must be installed.
+1. [Google Go 1.x](http://golang.org/) must be installed.
 2. Lotus Notes must be installed.
 3. startWebContainer must be set to true to enable the webapi.
 
