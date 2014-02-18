@@ -6,7 +6,7 @@
 // @requires Lotus Notes 8+, Google Go 1.2
 // @project https://github.com/LarryBattle/SameTimeTrackStatus/
 // @author Larry Battle
-// @version 0.1.1
+// @version 0.1.2
 // @todo Add new flags : -users=id1,id2,id3 -verbose=bool -api_url=string -interval=#minutes
 // @todo add check for Lotus Notes and setting.
 // @todo refactor into objects; webapi, storage, cli, settings, user
@@ -24,9 +24,15 @@ import (
 )
 
 const (
-	VERSION             = "0.1.1"
+	VERSION             = "0.1.2"
 	TIME_STAMP_FORMAT   = "01/02/2006 03:04:05pm"
 	DEFAULT_OUTPUT_FILE = "output.txt"
+)
+const (
+	RETURN_CODE_NO_PROBLEMS = iota
+	RETURN_CODE_INVALID_ARGUMENT
+	RETURN_CODE_MISSING_REQUIRED_ARGUMENT
+	RETURN_CODE_WEB_API_DISABLED
 )
 
 var (
@@ -34,7 +40,7 @@ var (
 	outputFile             string
 	userId                 string
 	showVersion            bool
-	numOfMinutes	uint
+	numOfMinutes           uint
 )
 
 // Used to only contain the essenential properties from the json response
@@ -60,15 +66,20 @@ func processFlags() {
 func checkSettings() {
 	if showVersion {
 		fmt.Printf("Version %s\n", VERSION)
-		os.Exit(1)
+		os.Exit(RETURN_CODE_NO_PROBLEMS)
 	}
 	if userId == "" {
 		fmt.Println("The argument `userid` is required.")
-		os.Exit(1)
+		os.Exit(RETURN_CODE_MISSING_REQUIRED_ARGUMENT)
 	}
 	if numOfMinutes < 1 || 200 < numOfMinutes {
-		fmt.Println("The argument `userid` is required.")
-		os.Exit(1)
+		fmt.Println("The argument `interval` must be between 1 and 200.")
+		os.Exit(RETURN_CODE_INVALID_ARGUMENT)
+	}
+	res, err := getUserInfo(userId)
+	if err != nil || res == nil {
+		fmt.Println("WebAPI is disabled. Please follow the documentation on how to enabled this.")
+		os.Exit(RETURN_CODE_WEB_API_DISABLED)
 	}
 }
 
@@ -103,10 +114,13 @@ func extractInfoFromJSON(json_string []byte) []byte {
 	checkError(err)
 	return b
 }
+func getUserInfo(userId string) (*http.Response, error) {
+	return http.Get(sametime_getstatus_URL + userId)
+}
 
 // Returns the JSON response from a `getstatus` webapi call for a specific userId
 func getSameTimeStatusOfUser(userId string) []byte {
-	res, err := http.Get(sametime_getstatus_URL + userId)
+	res, err := getUserInfo(userId)
 	checkError(err)
 	defer res.Body.Close()
 	json_response, err := ioutil.ReadAll(res.Body)
@@ -131,10 +145,14 @@ func logSameTimeStatus(userId string) {
 // Calls a function every t times.
 func startCounter(t time.Duration, fn func()) {
 	i := 0
-	for _ = range time.Tick(t) {
+	var x = func() {
 		i++
 		log.Println("Logging status #", i)
 		fn()
+	}
+	x()
+	for _ = range time.Tick(t) {
+		x()
 	}
 }
 func main() {
@@ -142,7 +160,7 @@ func main() {
 	processFlags()
 	checkSettings()
 	log.Printf("Every %d minutes: Saving status for %s to %s\n", numOfMinutes, userId, outputFile)
-	startCounter( time.Duration(numOfMinutes) *time.Minute, func() {
+	startCounter(time.Duration(numOfMinutes)*time.Minute, func() {
 		logSameTimeStatus(userId)
 	})
 }
