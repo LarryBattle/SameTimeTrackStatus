@@ -12,5 +12,5 @@
 ## Version 0.0.3
 - Improved code.
 
-## Version 0..1
+## Version 0.0.1
 - Initial Commit
